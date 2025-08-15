@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alphabit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --button-bg: #f8f9fa;
+            --button-hover: #e9ecef;
+            --border-color: #ddd;
+            --popup-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --button-bg: #333333;
+            --button-hover: #444444;
+            --border-color: #555;
+            --popup-bg: #2a2a2a;
+            --shadow: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .login-btn, .theme-toggle {
+            padding: 8px 16px;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover, .theme-toggle:hover {
+            background-color: var(--button-hover);
+        }
+
+        .main-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 72px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .alpha {
+            color: #ff0000;
+        }
+
+        .bit {
+            color: #cc0000;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 60px;
+        }
+
+        .search-input {
+            width: 400px;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .search-btn {
+            padding: 12px 24px;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: var(--button-hover);
+        }
+
+        .example-search {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 100px;
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .main-btn {
+            padding: 12px 24px;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .main-btn:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--popup-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px var(--shadow);
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .login-input {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .cat-art {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 12px;
+            margin: 20px 0;
+            line-height: 1;
+        }
+
+        .cat-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .cat-btn {
+            padding: 8px 16px;
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cat-btn:hover {
+            background-color: var(--button-hover);
+        }
+
+        .clicker-game {
+            text-align: center;
+        }
+
+        .click-btn {
+            padding: 20px 40px;
+            font-size: 24px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+
+        .click-btn:hover {
+            background-color: #45a049;
+        }
+
+        .contact-info {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin: 20px 0;
+        }
+
+        .calc-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .calc-input {
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .calc-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .calc-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .calc-result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="login-btn" onclick="openLogin()">Login</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+    </div>
+
+    <div class="main-content">
+        <div class="logo">
+            <span class="alpha">Alpha</span><span class="bit">bit</span>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search..." id="searchInput">
+                <button class="search-btn" onclick="performSearch()">Search</button>
+            </div>
+            
+            <div class="example-search">
+                Example searches: "weather", "news", "recipes", "tutorials"
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button class="main-btn" onclick="openLucky()">I'm Feeling Lucky</button>
+            <button class="main-btn" onclick="openMore()">More</button>
+            <button class="main-btn" onclick="openContact()">Contact Us</button>
+            <button class="main-btn" onclick="openCalculator()">Calculator</button>
+        </div>
+    </div>
+
+    <!-- Login Popup -->
+    <div id="loginPopup" class="popup">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closePopup('loginPopup')">×</button>
+            <h2>Login</h2>
+            <div class="login-form">
+                <input type="text" class="login-input" placeholder="Username" id="username">
+                <input type="password" class="login-input" placeholder="Password" id="password">
+                <button class="main-btn" onclick="login()">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lucky Popup -->
+    <div id="luckyPopup" class="popup">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closePopup('luckyPopup')">×</button>
+            <div class="clicker-game">
+                <h2>Clicker Game</h2>
+                <p>Clicks: <span id="clickCount">0</span></p>
+                <button class="click-btn" onclick="incrementClick()">CLICK ME!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- More Popup -->
+    <div id="morePopup" class="popup">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closePopup('morePopup')">×</button>
+            <h2>More Options</h2>
+            <div class="cat-art">    /\_/\  
+   ( o.o ) 
+    > ^ <</div>
+            <div class="cat-buttons">
+                <button class="cat-btn" onclick="alert('Meow!')">Pet Cat</button>
+                <button class="cat-btn" onclick="alert('Purr purr...')">Feed Cat</button>
+                <button class="cat-btn" onclick="alert('Cat is playing!')">Play</button>
+                <button class="cat-btn" onclick="alert('Cat is sleeping...')">Sleep</button>
+                <button class="cat-btn" onclick="alert('Cat says hello!')">Talk</button>
+                <button class="cat-btn" onclick="alert('Cat is dancing!')">Dance</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Popup -->
+    <div id="contactPopup" class="popup">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closePopup('contactPopup')">×</button>
+            <h2>Contact Us</h2>
+            <div class="contact-info">+1 234 567 89</div>
+        </div>
+    </div>
+
+    <!-- Calculator Popup -->
+    <div id="calculatorPopup" class="popup">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closePopup('calculatorPopup')">×</button>
+            <h2>Calculator</h2>
+            <div class="calc-container">
+                <input type="text" class="calc-input" placeholder="Enter calculation (e.g., 2+2)" id="calcInput">
+                <button class="calc-btn" onclick="calculate()">Calculate</button>
+                <div id="calcResult" class="calc-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        let currentTheme = 'light';
+
+        // Theme toggle
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+
+        // Popup functions
+        function openLogin() {
+            document.getElementById('loginPopup').style.display = 'block';
+        }
+
+        function openLucky() {
+            document.getElementById('luckyPopup').style.display = 'block';
+        }
+
+        function openMore() {
+            document.getElementById('morePopup').style.display = 'block';
+        }
+
+        function openContact() {
+            document.getElementById('contactPopup').style.display = 'block';
+        }
+
+        function openCalculator() {
+            document.getElementById('calculatorPopup').style.display = 'block';
+        }
+
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+        }
+
+        // Close popup when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('popup')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Login function (easy to modify)
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Add more users here easily
+            const users = {
+                'admin': 'password123',
+                'user': 'user123',
+                'demo': 'demo'
+            };
+
+            if (users[username] && users[username] === password) {
+                alert('Login successful! Welcome ' + username);
+                closePopup('loginPopup');
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
+        // Search function (easy to add more functionality)
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim()) {
+                // Add your search logic here
+                alert('Searching for: ' + searchTerm);
+                // You can easily add more search functionality here
+            } else {
+                alert('Please enter a search term');
+            }
+        }
+
+        // Clicker game
+        function incrementClick() {
+            clickCount++;
+            document.getElementById('clickCount').textContent = clickCount;
+        }
+
+        // Calculator
+        function calculate() {
+            const input = document.getElementById('calcInput').value;
+            const resultDiv = document.getElementById('calcResult');
+            
+            try {
+                // Basic security: only allow numbers and basic operators
+                if (/^[0-9+\-*/.() ]+$/.test(input)) {
+                    const result = eval(input);
+                    resultDiv.textContent = 'Result: ' + result;
+                } else {
+                    resultDiv.textContent = 'Invalid calculation';
+                }
+            } catch (error) {
+                resultDiv.textContent = 'Error in calculation';
+            }
+        }
+
+        // Allow Enter key for search and calculator
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        document.getElementById('calcInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+    </script>
+</body>
+</html>
